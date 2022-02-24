@@ -56,6 +56,16 @@ class GetListIntegrationTests {
                 .andExpect(jsonPath("$[1].comment", is("some-comment-2")))
                 .andExpect(jsonPath("$[1].significance", is(0)));
     }
+    @Test
+    @Transactional
+    void onValidRequestAndEmptyDatabaseShouldReturnSuccessfulEmptyResponse() throws Exception {
+
+        mockMvc.perform(createDefaultRequest())
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(0)))
+                .andExpect(jsonPath("$", empty()));
+    }
 
 
     private MockHttpServletRequestBuilder createDefaultRequest() {
