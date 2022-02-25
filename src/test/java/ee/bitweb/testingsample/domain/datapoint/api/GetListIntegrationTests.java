@@ -63,8 +63,7 @@ class GetListIntegrationTests {
         mockMvc.perform(createDefaultRequest())
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(0)))
-                .andExpect(jsonPath("$", empty()));
+                .andExpect(jsonPath("$", hasSize(0)));
     }
 
 
