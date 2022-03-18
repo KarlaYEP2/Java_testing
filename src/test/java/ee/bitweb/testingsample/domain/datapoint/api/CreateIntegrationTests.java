@@ -52,19 +52,19 @@ class CreateIntegrationTests {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", aMapWithSize(5)))
-                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.id", notNullValue()))
                 .andExpect(jsonPath("$.externalId", is("external-id-123")))
                 .andExpect(jsonPath("$.value", is("some-value-123")))
-                .andExpect(jsonPath("$.comment", is(nullValue())))
+                .andExpect(jsonPath("$.comment",nullValue()))
                 .andExpect(jsonPath("$.significance", is(1)));
 
         DataPoint point = repository.findAll().get(0);
 
         // db assert
         assertAll(
-                () -> assertEquals("external-id-123", point.getExternalId()),
-                () -> assertEquals("some-value-123", point.getValue()),
-                () -> assertEquals(nullValue(), point.getComment()),
+                () -> Assertions.assertEquals("external-id-123", point.getExternalId()),
+                () -> Assertions.assertEquals("some-value-123", point.getValue()),
+                () -> Assertions.assertNull(point.getComment()),
                 () -> Assertions.assertEquals(1, point.getSignificance())
         );
     }
@@ -80,7 +80,7 @@ class CreateIntegrationTests {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", aMapWithSize(5)))
-                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.id", notNullValue()))
                 .andExpect(jsonPath("$.externalId", is("external-id-123")))
                 .andExpect(jsonPath("$.value", is("some-value-123")))
                 .andExpect(jsonPath("$.comment", is("some-comment-123")))
@@ -90,9 +90,9 @@ class CreateIntegrationTests {
 
         // db assert
         assertAll(
-                () -> assertEquals("external-id-123", point.getExternalId()),
-                () -> assertEquals("some-value-123", point.getValue()),
-                () -> assertEquals("some-comment-123", point.getComment()),
+                () -> Assertions.assertEquals("external-id-123", point.getExternalId()),
+                () -> Assertions.assertEquals("some-value-123", point.getValue()),
+                () -> Assertions.assertEquals("some-comment-123", point.getComment()),
                 () -> Assertions.assertEquals(1, point.getSignificance())
         );
     }

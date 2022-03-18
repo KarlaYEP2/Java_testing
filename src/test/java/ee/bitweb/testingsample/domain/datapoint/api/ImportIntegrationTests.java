@@ -61,7 +61,7 @@ class ImportIntegrationTests {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$[0]", aMapWithSize(5)))
-                .andExpect(jsonPath("$[0].id", is(1)))
+                .andExpect(jsonPath("$[0].id", notNullValue()))
                 .andExpect(jsonPath("$[0].externalId", is("external-id-1")))
                 .andExpect(jsonPath("$[0].value", is("Something-new")))
                 .andExpect(jsonPath("$[0].comment", is("some-comment-1")))

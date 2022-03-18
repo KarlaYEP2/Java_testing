@@ -44,7 +44,7 @@ class GetByIdIntegrationTests {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", aMapWithSize(5)))
-                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.id", notNullValue()))
                 .andExpect(jsonPath("$.externalId", is("external-id-1")))
                 .andExpect(jsonPath("$.value", is("some-value-1")))
                 .andExpect(jsonPath("$.comment", is("some-comment-1")))
@@ -54,8 +54,7 @@ class GetByIdIntegrationTests {
     @Test
     @Transactional
     void OnInvalidShouldReturnNotFound() throws  Exception {
-        DataPoint point = repository.save(create(1L));
-        mockMvc.perform(createDefaultRequest("3"))
+        mockMvc.perform(createDefaultRequest("2"))
                 .andDo(print())
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$", aMapWithSize(4)))
@@ -63,7 +62,7 @@ class GetByIdIntegrationTests {
                 .andExpect(jsonPath("$.message", is("Entity DataPoint not found")))
                 .andExpect(jsonPath("$.entity", is("DataPoint")))
                 .andExpect(jsonPath("$.criteria[0].field", is("id")))
-                .andExpect(jsonPath("$.criteria[0].value", is("3")));
+                .andExpect(jsonPath("$.criteria[0].value", is("2")));
 
 
     }
@@ -71,7 +70,6 @@ class GetByIdIntegrationTests {
     @Test
     @Transactional
     void onInvalidNegativeIdShouldReturnNotFound() throws Exception {
-        DataPoint point = repository.save(create(1L));
         mockMvc.perform(createDefaultRequest("-2"))
                 .andDo(print())
                 .andExpect(status().isNotFound())
@@ -101,7 +99,7 @@ class GetByIdIntegrationTests {
                 .andExpect(jsonPath("$.id", is(startsWith("-1"))))
                 .andExpect(jsonPath("$.message", is("MESSAGE_NOT_READABLE")));
 
-        assertEquals(0, repository.count());
+        Assertions.assertEquals(0, repository.count());
 
     }
     private MockHttpServletRequestBuilder createDefaultRequest(String param) {
